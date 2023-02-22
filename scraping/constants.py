@@ -6,7 +6,6 @@ WB_REVIEWS_URL_1 = 'https://feedbacks1.wb.ru/feedbacks/v1/{}'
 WB_REVIEWS_URL_2 = 'https://feedbacks2.wb.ru/feedbacks/v1/{}'
 
 # headers
-
 HEADERS = {
     'Accept': '*/*',
     'Accept-Language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7',
