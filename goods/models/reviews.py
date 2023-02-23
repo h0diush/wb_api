@@ -8,7 +8,7 @@ class Review(models.Model):
     rating = models.PositiveSmallIntegerField('Оценка')
     good = models.ForeignKey(
         'goods.Good', models.CASCADE, 'reviews_info',
-        verbose_name='Товар'
+        verbose_name='Товар',
     )
 
     class Meta:
