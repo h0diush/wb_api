@@ -6,16 +6,14 @@ from scraping import constants
 def get_info_goods(article):
     data = requests.get(constants.WB_CARD_URL.format(article),
                         headers=constants.HEADERS)
-    if data.status_code != 200:
-        raise ValueError('Нет доступа к товару')
     data = data.json()
     output_data = {}
     try:
         output_data.update({
             'name': data['data']['products'][0]['name'],
-            'id': data['data']['products'][0]['id'],
-            'root': data['data']['products'][0]['root'],
-            'price_byn': '{:.2f} руб'.format(
+            'goods_id': data['data']['products'][0]['id'],
+            'root_id': data['data']['products'][0]['root'],
+            'price': '{:.2f} руб'.format(
                 data['data']['products'][0]['extended']['clientPriceU'] / 100)
         })
     except IndexError:
@@ -43,5 +41,3 @@ def get_url(root=None):
     if not _get_reviews_goods(constants.WB_REVIEWS_URL_2.format(root)):
         return _get_reviews_goods(constants.WB_REVIEWS_URL_1.format(root))
     return _get_reviews_goods(constants.WB_REVIEWS_URL_2.format(root))
-
-# print(get_url(root=120672181))
