@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse, NoReverseMatch
 
 
 class Good(models.Model):
@@ -18,6 +19,16 @@ class Good(models.Model):
         'goods.Review', related_name='goods_reviews', blank=True,
     )
 
+    @property
+    def get_url_reviews(self):
+        try:
+            return reverse("reviews-check", kwargs={"goods_id": self.goods_id})
+        except NoReverseMatch:
+            return '-'
+
     class Meta:
         verbose_name = "Товар"
         verbose_name_plural = "Товары"
+
+    def __str__(self):
+        return self.name

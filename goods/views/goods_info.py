@@ -1,41 +1,33 @@
-from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
+from common.mixins.views import CRDViewMixin
 from goods.models import Good
-from goods.serializers.article_serializer import ArticleInputSerializer
-from scraping.scraping_for_wildberries import get_info_goods
+from goods.serializers.goods import GoodsListSerializer, GoodsCreateSerializer, \
+    GoodsRetrieveSerializer
 
 
-class InfoGoodsView(APIView):
+class GoodsListForUserView(CRDViewMixin):
+    permission_classes = [IsAuthenticated]
 
-    def post(self, request):
-        serializer = ArticleInputSerializer(data=request.data)
+    def get_serializer_class(self):
+        if self.action == 'create':
+            return GoodsCreateSerializer
+        if self.action == 'retrieve':
+            return GoodsRetrieveSerializer
+        return GoodsListSerializer
+
+    def get_queryset(self):
+        return Good.objects.filter(user=self.request.user)
+
+    def create(self, request, *args, **kwargs):
+        serializer_context = {
+            'request': request,
+        }
+        serializer = self.get_serializer(data=request.data,
+                                         context=serializer_context)
         serializer.is_valid(raise_exception=True)
-        data = get_info_goods(request.POST.get('article'))
-        if not data:
-            return Response({"error": "Проверьте артикул"},
-                            status=status.HTTP_204_NO_CONTENT)
+        serializer.save()
         return Response({
-            "results": data
-        }, status=status.HTTP_200_OK)
-
-
-class GoodsSaveView(APIView):
-    def get(self, request, goods_id):
-        if request.user.is_anonymous:
-            return Response({
-                "errors": "Необходимо авторизоваться"
-            }, status=status.HTTP_401_UNAUTHORIZED)
-        data = get_info_goods(goods_id)
-        if not data:
-            return Response({"error": "Проверьте артикул"},
-                            status=status.HTTP_204_NO_CONTENT)
-        user = request.user
-        good, created = Good.objects.get_or_create(
-            user=user,
-            **data
-        )
-        return Response({
-            "results": f"Товар '{good.name}(Артикул: {good.goods_id})' успешно сохранен"
-        }, status=status.HTTP_200_OK)
+            "results": serializer.OUTPUT_DATA
+        })

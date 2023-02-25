@@ -69,7 +69,7 @@ REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": [
         "django_filters.rest_framework.DjangoFilterBackend"
     ],
-    # 'DEFAULT_PAGINATION_CLASS': 'common.pagination.BasePagination',
+    'DEFAULT_PAGINATION_CLASS': 'common.pagination.BasePagination',
 }
 # REST_FRAMEWORK = {
 #     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',

@@ -4,7 +4,7 @@ from django.db import models
 class Review(models.Model):
     author = models.CharField('Автор отзыва', max_length=75)
     country = models.CharField("Страна автора", max_length=15)
-    text = models.CharField('Текст отзыва', max_length=255)
+    text = models.TextField('Текст отзыва')
     rating = models.PositiveSmallIntegerField('Оценка')
     good = models.ForeignKey(
         'goods.Good', models.CASCADE, 'reviews_info',
