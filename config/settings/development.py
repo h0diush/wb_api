@@ -5,12 +5,15 @@ from .base import *
 SECRET_KEY = env.str("SECRET_KEY")
 ALLOWED_HOSTS = env.str("ALLOWED_HOSTS", default="").split(" ")
 DEBUG = env.bool("DEBUG", default=False)
+TELEGRAM_BOT_TOKEN = env.str("TELEGRAM_BOT_TOKEN")
+TELEGRAM_CHAT_ID = env.str("TELEGRAM_CHAT_ID")
 
 LOCAL_APPS = [
     "users.apps.UsersConfig",
     "common.apps.CommonConfig",
     "goods.apps.GoodsConfig",
     "api.apps.ApiConfig",
+    "bot.apps.BotConfig",
 ]
 
 DATABASES = {
@@ -71,27 +74,6 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PAGINATION_CLASS': 'common.pagination.BasePagination',
 }
-# REST_FRAMEWORK = {
-#     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
-#     'DATETIME_FORMAT': "%d.%m.%Y - %H:%M:%S",
-#     'DEFAULT_PAGINATION_CLASS':
-#         'rest_framework.pagination.PageNumberPagination',
-#     'PAGE_SIZE': 10,
-#     'DEFAULT_PERMISSION_CLASSES': (
-#         'rest_framework.permissions.AllowAny',
-#     ),
-#     'DEFAULT_AUTHENTICATION_CLASSES': (
-#         'rest_framework.authentication.TokenAuthentication',
-#         'rest_framework_simplejwt.authentication.JWTAuthentication',
-#         'rest_framework.authentication.SessionAuthentication',
-#     ),
-#     # 'DEFAULT_RENDERER_CLASSES': (
-#     #     'rest_framework.renderers.JSONRenderer',
-#     # ),
-#     'DEFAULT_FILTER_BACKENDS': [
-#         'django_filters.rest_framework.DjangoFilterBackend'
-#     ],
-# }
 
 ########### SPECTACULAR  ###########
 SPECTACULAR_SETTINGS = {
