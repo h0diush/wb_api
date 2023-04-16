@@ -2,20 +2,21 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
 
-from users.models.profiles import Profile
+from users.models.profiles import CodeForTelegram
 from users.models.users import User
 
 
-class ProfileAdmin(admin.StackedInline):
-    model = Profile
-    fields = ('telegram_id',)
+@admin.register(CodeForTelegram)
+class CodeForTelegramAdmin(admin.ModelAdmin):
+    list_display = ('hash_code', 'user')
 
 
 @admin.register(User)
 class UserAdmin(UserAdmin):
     change_user_password_template = None
     fieldsets = (
-        (None, {'fields': ('phone_number', 'email', 'username')}),
+        (None,
+         {'fields': ('phone_number', 'email', 'username', 'telegram_id')}),
         (_('Личная информация'),
          {'fields': ('first_name', 'last_name',)}),
         (_('Permissions'), {
@@ -33,7 +34,7 @@ class UserAdmin(UserAdmin):
                        ),
         }),
     )
-    list_display = ('id', 'full_name', 'email', 'phone_number',)
+    list_display = ('id', 'full_name', 'email', 'phone_number', 'telegram_id')
 
     list_display_links = ('id', 'full_name',)
     list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups')
@@ -41,5 +42,3 @@ class UserAdmin(UserAdmin):
     ordering = ('-id',)
     filter_horizontal = ('groups', 'user_permissions',)
     readonly_fields = ('last_login',)
-
-    inlines = (ProfileAdmin,)

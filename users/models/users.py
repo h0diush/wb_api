@@ -13,6 +13,8 @@ class User(AbstractUser):
     phone_number = PhoneNumberField(
         "Номер телефона", unique=True, null=True, blank=True
     )
+    telegram_id = models.CharField("Телеграм ID", max_length=25, null=True,
+                                   blank=True)
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = ["email"]
 
